@@ -1,0 +1,17 @@
+{
+  "name": "tech-blog",
+  "version": "1.0.0",
+  "description": "MVC tech blog from scratch",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "seed": "node seed/index.js"
+  },
+  "author": "Yougesh",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.5",
+    "sequelize": "^6.35.2"
+  }
+}
