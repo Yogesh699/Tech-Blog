@@ -1,0 +1,56 @@
+<div class="card w-50 m-auto my-4">
+        <div class="card-header">
+            <h4 class="card-title">{{post.title}}</h2>
+            <h5 class="card-subtitle mb-2 text-muted">{{post.user.username}}</h4>
+            <span class="card-subtitle mb-2 text-muted">{{format_date post.created_at}}</span>
+        </div>
+        
+        <div class="card-body">
+            <p class="card-text">{{post.post_text}}</p>
+        </div>
+        
+        <div class="card-footer">
+            <a href="/post/{{post.id}}" class="card-link">{{post.comments.length}} {{format_plural "comment" post.comments.length}}</a>
+        </div>
+    </div>
+    
+    {{!-- {{> comments post.comments}} --}}
+
+{{#if loggedIn}}
+    <div class="container mt-5">
+        <form class="comment-form">
+            <div class="form-group">
+                <label for="comment-body">Comment:</label>
+                <textarea class="form-control" id="comment-body" name="comment-body" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group m-2 text-center">
+                <button type="submit" class="btn btn-primary">Add Comment</button>
+            </div>
+        </form>
+    </div>
+{{/if}}
+
+
+{{#if loggedIn}}
+<script>
+    const commentFormHandler = async (event) => {
+        event.preventDefault();
+
+        const comment_text = document.querySelector('textarea[name="comment-body"]').value.trim();
+        const post_id = window.location.toString().split('/').pop();
+
+        if (comment_text) {
+            const response = await fetch('/api/comments', {
+                method: 'POST',
+                body: JSON.stringify({ post_id, comment_text }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            response.ok ? document.location.reload() : alert(response.statusText);
+        }
+    };
+
+    document.querySelector('.comment-form').addEventListener('submit', commentFormHandler);
+</script>
+{{/if}}

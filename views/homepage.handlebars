@@ -1,3 +1,17 @@
-  {{!-- {{#each posts as |post|}}
-    {{> post-info post}}
-  {{/each}} --}}
+  {{#each posts as |post|}}
+    <div class="card w-50 m-auto my-4">
+        <div class="card-header">
+            <h4 class="card-title">{{title}}</h2>
+            <h5 class="card-subtitle mb-2 text-muted">{{user.username}}</h4>
+            <span class="card-subtitle mb-2 text-muted">{{format_date created_at}}</span>
+        </div>
+        
+        <div class="card-body">
+            <p class="card-text">{{post_text}}</p>
+        </div>
+        
+        <div class="card-footer">
+            <a href="/post/{{id}}" class="card-link">{{comments.length}} {{format_plural "comment" comments.length}}</a>
+        </div>
+    </div>
+{{/each}}
