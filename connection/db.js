@@ -1,3 +1,6 @@
 import Sequelize from 'sequelize'
-const sequelize = new Sequelize('mysql://root:@localhost/tech_blog')
+import dotenv from 'dotenv';
+dotenv.config();
+
+const sequelize = new Sequelize(process.env.QUERYSTRING)
 export default sequelize;
