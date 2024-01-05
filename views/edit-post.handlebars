@@ -1,0 +1,78 @@
+<article>
+    <div class="container mt-5">
+        <h2>Edit Post</h2>
+        <form class="edit-post-form">
+            <div class="form-group">
+                <label for="post-title">Post Title:</label>
+                <input type="text" class="form-control" id="post-title" name="post-title" value="{{post.title}}" />
+            </div>
+            <div class="form-group">
+                <label for="post-text">Post Text:</label>
+                <textarea class="form-control" id="post-text" name="post-text">{{post.post_text}}</textarea>
+            </div>
+            <div class="row mt-2">
+                <div class="col-2"></div>
+                <button type="submit" class="btn btn-primary col-4">Save Post</button>
+                <button type="button" class="btn btn-danger delete-post-btn col-4">Delete Post</button>
+                <div class="col-2"></div>
+            </div>
+        </form>
+    </div>
+</article>
+
+
+
+{{> comments post.comments}}
+
+<script>
+const editFormHandler = async (event) => {
+    event.preventDefault();
+
+    const id = window.location.toString().split('/').pop();
+
+    const title = document.querySelector('input[name="post-title"]').value;
+    const post_text = document.querySelector('textarea[name="post-text"]').value;
+
+    const response = await fetch(`/api/posts/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ title, post_text }),
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    response.ok ? document.location.replace('/dashboard/') : alert(response.statusText);
+};
+
+const deleteFormHandler = async (event) => {
+    event.preventDefault();
+
+    const id = window.location.toString().split('/').pop();
+
+    const response = await fetch(`/api/posts/${id}`, {
+        method: 'DELETE'
+    });
+
+    response.ok ? document.location.replace('/dashboard/') : alert(response.statusText);
+};
+
+const commentFormHandler = async (event) => {
+    event.preventDefault();
+
+    const comment_text = document.querySelector('textarea[name="comment-body"]').value.trim();
+    const post_id = window.location.toString().split('/').pop();
+
+    if (comment_text) {
+        const response = await fetch('/api/comments', {
+            method: 'POST',
+            body: JSON.stringify({ post_id, comment_text }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        response.ok ? document.location.reload() : alert(response.statusText);
+    }
+};
+
+document.querySelector('.edit-post-form').addEventListener('submit', editFormHandler);
+document.querySelector('.delete-post-btn').addEventListener('click', deleteFormHandler);
+document.querySelector('.comment-form').addEventListener('submit', commentFormHandler);
+
+</script>

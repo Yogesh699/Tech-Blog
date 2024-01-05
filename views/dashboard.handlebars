@@ -1,0 +1,65 @@
+<section>
+    <h2 class="text-center">Create New Post</h2>
+    
+    <form class="new-post-form">
+        <div class="form-group">
+            <label for="post-title">Title</label>
+            <input type="text" class="form-control" id="post-title" name="post-title"/>
+        </div>
+        <div class="form-group">
+            <label for="post-text">Text</label>
+            <textarea class="form-control" id="post-text" name="post-text"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 my-2">Create</button>
+    </form>
+</section>
+<hr>
+{{#if posts.length}}
+<section>
+    <h2 class="text-center">Your Posts</h2>
+        {{#each posts as |post|}}
+            <div class="my-post">
+                <div class="card m-auto my-4">
+                    
+                    <div class="card-header">
+                        <h4 class="card-title">{{post.title}}</h2>
+                        <h5 class="card-subtitle mb-2 text-muted">Posted by: {{post.user.username}} on {{format_date post.created_at}}</h4>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p class="card-text">{{post.post_text}}</p>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <a href="/post/{{id}}" class="card-link">{{comments.length}} {{format_plural "comment" comments.length}}</a>
+                        <a href="/dashboard/edit/{{post.id}}" class="d-block text-center">Edit Post</a>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+</section>
+{{/if}}
+
+<script>
+    const newFormHandler = async (event) => {
+        event.preventDefault();
+
+        const title = document.querySelector('input[name="post-title"]').value;
+        const post_text = document.querySelector('textarea[name="post-text"]').value;
+
+        try {
+            const response = await fetch('/api/posts', {
+                method: 'POST',
+                body: JSON.stringify({ title, post_text }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (response.ok) document.location.replace('/dashboard');
+            else alert(response.statusText);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    document.querySelector('.new-post-form').addEventListener('submit', newFormHandler);
+</script>

@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row">
+    <div class="col-3"></div>
+    <div class="col-md-6">
+        <h2 class="text-center display-4">Signup</h2>
+        <form class="signup-form">
+            <div class="form-group">
+            <label for="username-signup">Username:</label>
+            <input type="text" class="form-control" id="username-signup">
+            </div>
+            <div class="form-group">
+            <label for="email-signup">Email:</label>
+            <input type="text" class="form-control" id="email-signup">
+            </div>
+            <div class="form-group">
+            <label for="password-signup">Password:</label>
+            <input type="password" class="form-control" id="password-signup">
+            </div>
+            <div class="form-group">
+            <input type="submit" class="btn btn-success w-100 mt-2" value="Sign-up"/>
+            </div>
+        </form>
+        </div>
+    <div class="col-3"></div>
+    </div>
+</div>
+
+<script>
+  const handleForm = async (event, endpoint, redirect, forms) => {
+  event.preventDefault();
+
+  let email, password, username= ""
+   email = document.querySelector(`#${forms[0]}`).value;
+    password = document.querySelector(`#${forms[1]}`).value;
+    username = document.querySelector(`#${forms[2]}`).value;
+    const response = await fetch(`/api/users`, {
+      method: 'post',
+      body: JSON.stringify({ email, password, username }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    response.ok ? document.location.replace(redirect) : alert(response.statusText);
+  }
+    document.querySelector('.signup-form').addEventListener('submit', (event) => handleForm(event, '', '/', ['email-signup', 'password-signup', 'username-signup']));
+</script>
