@@ -1,5 +1,7 @@
 # Tech Blog CMS
 
+![image](https://github.com/Yogesh699/Tech-Blog/assets/143371945/ccb8a3da-9636-4790-88c9-927f6f3044b5)
+
 This is a CMS-style blog site built from scratch following the Model-View-Controller (MVC) paradigm. Developers can use this platform to publish their blog posts, comment on others' posts, and engage in technical discussions. The application is deployed on Heroku and utilizes various technologies for a robust and secure development experience.
 
 ## Table of Contents
