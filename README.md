@@ -38,7 +38,7 @@ This is a CMS-style blog site built from scratch following the Model-View-Contro
 
 1. Clone the repository:
 ```bash
-   git clone https://github.com/your-username/tech-blog.git
+git clone https://github.com/your-username/tech-blog.git
 ```
 
 ## Install dependencies:
