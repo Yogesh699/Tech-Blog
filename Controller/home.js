@@ -2,10 +2,10 @@ import { Router } from 'express';
 const router = Router();
 import { User, Post, Comment } from '../model/index.js';
 
-// get all posts for homepage
-router.get('/', (req, res) => {
-  console.log('======================');
-  Post.findAll({
+// Route to get all posts for the homepage
+router.get('/', async (req, res) => {
+  // Fetch all posts with associated comments and users
+  let postData = await Post.findAll({
     attributes: [
       'id',
       'post_text',
@@ -26,42 +26,47 @@ router.get('/', (req, res) => {
         attributes: ['username']
       }
     ]
-  })
-    .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({ plain: true }));
+  });
 
-      res.render('homepage', {
-        posts,
-        loggedIn: req.session.loggedIn,
-        username: req.session.username
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  // Map the fetched data to plain objects
+  const posts = postData.map(post => post.get({ plain: true }));
+
+  // Render the homepage template with posts data and session information
+  res.render('homepage', {
+    posts,
+    loggedIn: req.session.loggedIn,
+    username: req.session.username
+  });
 });
 
+// Route to render the login page
 router.get('/login', (req, res) => {
+  // If the user is already logged in, redirect to the homepage
   if (req.session.loggedIn) {
     res.redirect('/');
     return;
   }
 
+  // Render the login template
   res.render('login');
 });
 
+// Route to render the signup page
 router.get('/signup', (req, res) => {
-    if (req.session.loggedIn) {
-      res.redirect('/');
-      return;
-    }
-  
-    res.render('signup');
-  });
+  // If the user is already logged in, redirect to the homepage
+  if (req.session.loggedIn) {
+    res.redirect('/');
+    return;
+  }
 
-router.get('/post/:id', (req, res) => {
-  Post.findOne({
+  // Render the signup template
+  res.render('signup');
+});
+
+// Route to get a single post by its ID
+router.get('/post/:id', async (req, res) => {
+  // Fetch the post with associated comments and users by ID
+  let postData = await Post.findOne({
     where: {
       id: req.params.id
     },
@@ -85,26 +90,23 @@ router.get('/post/:id', (req, res) => {
         attributes: ['username']
       }
     ]
-  })
-    .then(dbPostData => {
-      if (!dbPostData) {
-        res.status(404).json({ message: 'No post found with this id' });
-        return;
-      }
-      // serialize the data
-      const post = dbPostData.get({ plain: true })
+  });
 
-      // pass data to template
-      res.render('single-post', {
-        post,
-        loggedIn: req.session.loggedIn,
-        username: req.session.username
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  // If no post is found with the given ID, return a 404 error
+  if (!postData) {
+    res.status(404).json({ message: 'No post found with this id' });
+    return;
+  }
+
+  // Map the fetched data to a plain object
+  const post = postData.get({ plain: true });
+
+  // Render the single-post template with post data and session information
+  res.render('single-post', {
+    post,
+    loggedIn: req.session.loggedIn,
+    username: req.session.username
+  });
 });
 
 export default router;

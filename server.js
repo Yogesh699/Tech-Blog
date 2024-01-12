@@ -7,9 +7,8 @@ import helpers from './helpers.js/index.js';
 const app = express()
 const PORT = 3000
 
-// Handle Incoming data
 app.use(express.json())
-app.use(express.urlencoded({ extends: false }))
+app.use(express.urlencoded({ extends: true }))
 
 app.use(session({
     secret: 'MYSECRETKEY',

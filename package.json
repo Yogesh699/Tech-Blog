@@ -5,6 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "start":"node server.js",
     "seed": "node seed/index.js"
   },
   "author": "Yougesh",
