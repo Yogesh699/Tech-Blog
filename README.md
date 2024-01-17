@@ -63,7 +63,7 @@ Visit the deployed Heroku app or the local server.
 Sign up or log in to start publishing blog posts and commenting.
 
 ## Deployment
-link will be available when it deployed
+https://tech-blog-mode14-7aef1176dd5f.herokuapp.com/
 
 ## Contributing
 Contributions are welcome! 
